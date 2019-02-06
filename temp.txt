@@ -1,2 +1,3 @@
 Temporary file for setting up the git repo
 test1
+test2
