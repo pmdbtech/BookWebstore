@@ -1,0 +1,27 @@
+{
+  "name": "bookwebstore",
+  "version": "1.0.0",
+  "description": "An online bookstore",
+  "main": "index.js",
+  "scripts": {
+    "test": "start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bcitcstkevm/BookWebstore.git"
+  },
+  "author": "Kevin M",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bcitcstkevm/BookWebstore/issues"
+  },
+  "homepage": "https://github.com/bcitcstkevm/BookWebstore#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cookie-parser": "^1.4.4",
+    "express": "^4.16.4",
+    "express-session": "^1.15.6",
+    "jquery": "^3.3.1",
+    "webpack": "^4.29.6"
+  }
+}
