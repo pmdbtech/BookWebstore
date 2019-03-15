@@ -4,7 +4,9 @@
   "description": "An online bookstore",
   "main": "index.js",
   "scripts": {
-    "test": "start"
+    "start": "node index",
+    "dev": "nodemon index",
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
@@ -22,6 +24,11 @@
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "jquery": "^3.3.1",
+    "mysql": "^2.16.0",
     "webpack": "^4.29.6"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.10",
+    "webpack-cli": "^3.3.0"
   }
 }
