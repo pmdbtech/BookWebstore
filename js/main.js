@@ -7,8 +7,6 @@ $(document).ready(
         // console.log("helloworld")
         // let frm = $("#userInfoForm");
 
-
-
         $.ajax({
             url:"/checkSession",
             type:"POST",
