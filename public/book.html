@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    
+
     <title>Book Page</title>
     <!-- KEv Code -->
     <script src="scripts/kevbundle.js"></script>
@@ -13,7 +13,7 @@
         function openForm() {
             document.getElementById("myForm").style.display = "block";
         }
-        
+
 
         function closeForm() {
             document.getElementById("myForm").style.display = "none";
@@ -25,209 +25,89 @@
     <!-- <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
     <script src="main.js"></script> --> -->
     <!-- <link rel="stylesheet" href="../css/book.css"> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.18/vue.min.js"></script>
 </head>
 
 <body>
 
-    <div class="app">
-        <header class="header">
-            <h1 class="logo"><a href="search.html">Book Page</a></h1>
-            <ul class="main-nav">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Username</a></li>
-                <li><a href="#">Library</a></li>
-            </ul>
+    <div id="app">
+        <div class="app">
+            <header class="header">
+                <h1 class="logo"><a href="search.html">Book Page</a></h1>
+                <ul class="main-nav">
+                    <li><a href="./search.html">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Username</a></li>
+                    <li><a href="#">Library</a></li>
 
-            <div class='user' id='userLogin'>
-                <button id ='loginpopup' type="button" onclick="openForm()">Login</button>
+                </ul>
+                <div class='user' id='userLogin'>
+                    <button id='loginpopup' type="button" onclick="openForm()">Login</button>
 
-                <div class="form-popup" id="myForm">
-                    <form class="form-container" id="userInfoForm">
-                        <h1>Login</h1>
+                    <div class="form-popup" id="myForm">
+                        <form class="form-container" id="userInfoForm">
+                            <h1>Login</h1>
 
-                        <label for="Username"><b>Username</b></label>
-                        <input id='getUserID' type="text" placeholder="Enter Username" name="user" required>
+                            <label for="Username"><b>Username</b></label>
+                            <input id='getUserID' type="text" placeholder="Enter Username" name="user" required>
 
-                        <label for="psw"><b>Password</b></label>
-                        <input id='psw' type="password" placeholder="Enter Password" name="psw" required>
+                            <label for="psw"><b>Password</b></label>
+                            <input id='psw' type="password" placeholder="Enter Password" name="psw" required>
 
-                        <button type="submit" id='loginbtn' class="btn">Login</button>
-                        <button type="submit" class="btn cancel" onclick="closeForm()">Close</button>
-                    </form>
+                            <button type="submit" id='loginbtn' class="btn">Login</button>
+                            <button type="submit" class="btn cancel" onclick="closeForm()">Close</button>
+                        </form>
+                    </div>
+                </div>
+            </header>
+
+            <div id="center">
+                <div id='bookcover'>
+                    <img src="{{bookInfo.details.book_picture}}" alt="Book Image" width="300" height="450">
+                </div>
+
+                <div id='bookInfo'>
+                    <h1 id='title'>{{ bookInfo.details.book_title }}</h1>
+                    <h3 id='author'>Author: {{ bookInfo.details.book_author }}</h3>
+                    <h4 id='tags'>
+                        Tags:
+                        <span v-for="tag in bookInfo.tags">
+                            {{ tag.tag_name }}
+                        </span>
+                    </h4>
+                    <P class='bookInfoPara'>
+                        {{bookInfo.details.book_description}}
+                    </P>
                 </div>
             </div>
 
-        </header>
+            <div id="list_buttons_div">
+                <a href="./list.html"><button class="list_buttons">Back</button></a>
+                <button class="list_buttons">Add To Cart</button>
+            </div>
+        </div>
 
-        <div id="center">
-            <div id='bookcover'>
-                <img src="../images/thg.jpg" alt="Book goes here">
+        <div class="after_center">
+            <div class="title">
+                <h1>Recommended Titles</h1>
             </div>
 
-            <div id='bookInfo'>
-                <h1 id='title'>Title: The Hunger Games</h1>
-                <h3 id='author'>Author: Feature by T$</h3>
-                <h4 id='tags'>Tags: Hunger, Games</h4>
-                <P class='bookInfoPara'>
-                    Description: To identify and illustrate The Hunger Games. The image is used
-                    for identification in
-                    the context of
-                    critical commentary of the work for which it serves as cover art. It makes a significant
-                    contribution to the user's understanding of the article, which could not practically be conveyed by
-                    words alone.The image is placed at the beginning of the article or section discussing the work, to
-                    help the user quickly identify the work and know they have found what they are looking for.Use for
-                    this purpose does not compete with the purposes of the original work, namely the book cover
-                    creator's ability to provide book cover design services and in turn marketing books to the public.
-                </P>
-            </div>
+            <section class="recommend">
+                <div class="bookitem" v-for="book in recommendedBooks">
+                    <div class='bkImg'>
+                        <img class='bkImgTag' @click="moreInfo(book.book_title)" src="{{book.book_picture}}" alt="book"
+                            width="250" height="400">
+                    </div>
+
+                    <div class='bkTitle'>
+                        <p class='bkTitlePara'>{{book.book_title}}</p>
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
 
-    <div class='spacer'>
-
-    </div>
-    <div class="after_center">
-        <div class="title">
-            <h1>Recommended Titles</h1>
-        </div>
-
-        <section class="recommend">
-            <div class="bookitem">
-                <div class='bkImg'>
-                    <img class='bkImgTag' src="../images/alice.png" alt="book">
-                </div>
-
-                <div class='bkTitle'>
-                    <p class='bkTitlePara'>Alice!</p>
-
-                </div>
-            </div>
-            <div class="bookitem">
-                <div class='bkImg'>
-                    <img class='bkImgTag' src="../images/alice.png" alt="book">
-                </div>
-
-                <div class='bkTitle'>
-                    <p class='bkTitlePara'>Alice!</p>
-
-                </div>
-            </div>
-            <div class="bookitem">
-                <div class='bkImg'>
-                    <img class='bkImgTag' src="../images/alice.png" alt="book">
-                </div>
-
-                <div class='bkTitle'>
-                    <p class='bkTitlePara'>Alice!</p>
-
-                </div>
-            </div>
-            <div class="bookitem">
-                <div class='bkImg'>
-                    <img class='bkImgTag' src="../images/alice.png" alt="book">
-                </div>
-
-                <div class='bkTitle'>
-                    <p class='bkTitlePara'>Alice!</p>
-
-                </div>
-            </div>
-            <div class="bookitem">
-                <div class='bkImg'>
-                    <img class='bkImgTag' src="../images/alice.png" alt="book">
-                </div>
-
-                <div class='bkTitle'>
-                    <p class='bkTitlePara'>Alice!</p>
-
-                </div>
-            </div>
-            <div class="bookitem">
-                <div class='bkImg'>
-                    <img class='bkImgTag' src="../images/alice.png" alt="book">
-                </div>
-
-                <div class='bkTitle'>
-                    <p class='bkTitlePara'>Alice!</p>
-
-                </div>
-            </div>
-            <div class="bookitem">
-                <div class='bkImg'>
-                    <img class='bkImgTag' src="../images/alice.png" alt="book">
-                </div>
-
-                <div class='bkTitle'>
-                    <p class='bkTitlePara'>Alice!</p>
-
-                </div>
-            </div>
-            <div class="bookitem">
-                <div class='bkImg'>
-                    <img class='bkImgTag' src="../images/alice.png" alt="book">
-                </div>
-
-                <div class='bkTitle'>
-                    <p class='bkTitlePara'>Alice!</p>
-
-                </div>
-            </div>
-            <div class="bookitem">
-                <div class='bkImg'>
-                    <img class='bkImgTag' src="../images/alice.png" alt="book">
-                </div>
-
-                <div class='bkTitle'>
-                    <p class='bkTitlePara'>Alice!</p>
-
-                </div>
-            </div>
-            <div class="bookitem">
-                <div class='bkImg'>
-                    <img class='bkImgTag' src="../images/alice.png" alt="book">
-                </div>
-
-                <div class='bkTitle'>
-                    <p class='bkTitlePara'>Alice!</p>
-
-                </div>
-            </div>
-            <div class="bookitem">
-                <div class='bkImg'>
-                    <img class='bkImgTag' src="../images/alice.png" alt="book">
-                </div>
-
-                <div class='bkTitle'>
-                    <p class='bkTitlePara'>Alice!</p>
-
-                </div>
-            </div>
-            <div class="bookitem">
-                <div class='bkImg'>
-                    <img class='bkImgTag' src="../images/alice.png" alt="book">
-                </div>
-
-                <div class='bkTitle'>
-                    <p class='bkTitlePara'>Alice!</p>
-
-                </div>
-            </div>
-            <div class="bookitem">
-                <div class='bkImg'>
-                    <img class='bkImgTag' src="../images/alice.png" alt="book">
-                </div>
-
-                <div class='bkTitle'>
-                    <p class='bkTitlePara'>Alice!</p>
-
-                </div>
-            </div>
-
-        </section>
-    </div>
-
-
+    <script src="../js/book.js"></script>
 </body>
 
 

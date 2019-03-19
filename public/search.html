@@ -21,45 +21,50 @@
     </script>
 </head>
 
-<body>
-    <div class="app">
-        <header class="header">
-            <h1 class="logo"><a href="#">Bookstore DB</a></h1>
-            <ul class="main-nav">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Username</a></li>
-                <li><a href="#">Library</a></li>
-            </ul>
+<body> 
 
-            <div class='user' id='userLogin'>
-                <button id ='loginpopup' type="button" onclick="openForm()">Login</button>
+        
+    <div id="app">
+        <div class="app">
+            <header class="header">
+                <h1 class="logo"><a href="#">Bookstore DB</a></h1>
+                <ul class="main-nav">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Username</a></li>
+                    <li><a href="#">Library</a></li>
+                </ul>
+                <div class='user' id='userLogin'>
+                    <button id ='loginpopup' type="button" onclick="openForm()">Login</button>
+    
+                    <div class="form-popup" id="myForm">
+                        <form class="form-container" id="userInfoForm">
+                            <h1>Login</h1>
+    
+                            <label for="Username"><b>Username</b></label>
+                            <input id='getUserID' type="text" placeholder="Enter Username" name="user" required>
+    
+                            <label for="psw"><b>Password</b></label>
+                            <input id='psw' type="password" placeholder="Enter Password" name="psw" required>
+    
+                            <button type="submit" id='loginbtn' class="btn">Login</button>
+                            <button type="submit" class="btn cancel" onclick="closeForm()">Close</button>
+                        </form>
+                    </div>
+                </div>
+            </header>
 
-                <div class="form-popup" id="myForm">
-                    <form class="form-container" id="userInfoForm">
-                        <h1>Login</h1>
-
-                        <label for="Username"><b>Username</b></label>
-                        <input id='getUserID' type="text" placeholder="Enter Username" name="user" required>
-
-                        <label for="psw"><b>Password</b></label>
-                        <input id='psw' type="password" placeholder="Enter Password" name="psw" required>
-
-                        <button type="submit" id='loginbtn' class="btn">Login</button>
-                        <button type="submit" class="btn cancel" onclick="closeForm()">Close</button>
-                    </form>
+            <div class="search">
+                <input v-model="title" id="search-bar" type="search" placeholder="Search a book today!">
+                <button @click='search' id="search-button">Search</button>
+            </div>
+            
+            <div class="recommend">
+                <div class="bookitem" v-for="book in featuredBooks">
+                    <img @click="moreInfo(book.book_title)" src="{{book.book_picture}}" alt="book" height="200px" width="130px" style="margin:none">
+                    <p id="booktitle">{{book.book_title}}</p>
                 </div>
             </div>
-        </header>
-
-        <div class="recommend">
-            <div class="bookitem">
-                <img src="./img/asoiaf.jpg" alt="book" height="100%" width="100%" style="margin:none">
-                <p style="text-align: center; margin-top:none">A song of ice and fire</p>
-            </div>
-            <div class="bookitem"></div>
-            <div class="bookitem"></div>
-            <div class="bookitem"></div>
         </div>
 
         <div class="search">

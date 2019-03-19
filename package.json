@@ -25,6 +25,7 @@
     "express-session": "^1.15.6",
     "jquery": "^3.3.1",
     "mysql": "^2.16.0",
+    "vue": "^2.6.8",
     "webpack": "^4.29.6"
   },
   "devDependencies": {

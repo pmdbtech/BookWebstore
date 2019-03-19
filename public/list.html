@@ -24,15 +24,36 @@
 </head>
 
 <body>
-    <div class="app">
-        <header class="header">
-            <h1 class="logo"><a href="search.html">List Page</a></h1>
-            <ul class="main-nav">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Username</a></li>
-                <li><a href="#">Library</a></li>
-            </ul>
+    <div id="app">
+        <div class="app">
+            <header class="header">
+                <h1 class="logo"><a href="search.html">List Page</a></h1>
+                <ul class="main-nav">
+                    <li><a href="/search">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Username</a></li>
+                    <li><a href="#">Library</a></li>
+                </ul>
+                <div class='user' id='userLogin'>
+                    <button id ='loginpopup' type="button" onclick="openForm()">Login</button>
+    
+                    <div class="form-popup" id="myForm">
+                        <form class="form-container" id="userInfoForm">
+                            <h1>Login</h1>
+    
+                            <label for="Username"><b>Username</b></label>
+                            <input id='getUserID' type="text" placeholder="Enter Username" name="user" required>
+    
+                            <label for="psw"><b>Password</b></label>
+                            <input id='psw' type="password" placeholder="Enter Password" name="psw" required>
+    
+                            <button type="submit" id='loginbtn' class="btn">Login</button>
+                            <button type="submit" class="btn cancel" onclick="closeForm()">Close</button>
+                        </form>
+                    </div>
+                </div>
+            </header>
+        </div>
 
             <div class='user' id='userLogin'>
                 <button id ='loginpopup' type="button" onclick="openForm()">Login</button>
@@ -47,9 +68,25 @@
                         <label for="psw"><b>Password</b></label>
                         <input id='psw' type="password" placeholder="Enter Password" name="psw" required>
 
+<<<<<<< HEAD
                         <button type="submit" id='loginbtn' class="btn">Login</button>
                         <button type="submit" class="btn cancel" onclick="closeForm()">Close</button>
                     </form>
+=======
+                <div class="infobk">
+                        <h2 id="title">{{book.book_title}}</h1>
+                        <h3 id="author">Author: {{book.book_author}}</h3>
+                        <h3 id="tags">Tags: {{book.tag_name}}</h3>
+                    <div id="book_info_block">
+                        <h4 id="Description">Description: {{ book.book_description }}</h3>
+                    </div>
+
+                    <div id="list_buttons_div">
+                        <button @click="moreInfo(book.book_title)" class="list_buttons">More Information</button>
+                        <button class="list_buttons">Add To Cart</button>
+                    </div>
+
+>>>>>>> 1eac2394753fbdc857ae88bf5359db22f3f3eda2
                 </div>
             </div>
 
