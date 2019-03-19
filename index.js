@@ -1,88 +1,207 @@
-const mysql = require('mysql');
+//Constants
 const express = require('express');
-const session = require("express-session");
-const bP = require("body-parser");
 const path = require('path');
+const mysql = require('mysql');
+const bodyParser = require('body-parser');
+const session = require('express-session');
 const app = express();
-// import {clearNode} from "./js/utils";
+const PORT = process.env.PORT || 3000;
 
-var connection = mysql.createConnection({
+//Establish a connection to mysql database.
+let connection = mysql.createConnection({
     host: 'dbproject.chw0z33b0eoj.us-west-2.rds.amazonaws.com',
     user: 'bookadmin',
     password: 'proj1234',
     database: 'bookstoredb'
 });
 
-// connection.connect(function (err) {
-//     if (err) {
-//         console.error('error connecting: ' + err.stack);
-//         return;
-//     }
-
-//     console.log('connected as id ' + connection.threadId);
-// });
-
 //provide pathing for client
 app.use("/scripts", express.static("build"));
 app.use("/styles", express.static("styles"));
 app.use("/images", express.static("images"));
+
+//allows use of express session
 app.use(session({
     secret: "pepperoni_sticks_thisisarandomhighentropystringcreatedtoencryptthecookie",
     resave: true,
     saveUninitialized: true
 }));
 
+// set static folder
+// app.use(express.static(path.join(__dirname)));
+
+
 //allows use of .body method
-app.use(bP.json());
-app.use(bP.urlencoded({
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
     extended: true
 }));
 
+//???
+app.use(express.json());
 
-app.get('/', (req, res) => {
 
-    res.sendFile(path.join(__dirname, "/public/book.html"));
+//Handle Get requests
 
-    // if (req.session.username) {
+app.get("/", (req, res) => {
+    res.sendFile("search.html", { root: __dirname + "/public" });
+});
 
+app.get("/search.html", (req, res) => {
+    res.sendFile("search.html", { root: __dirname + "/public" });
+});
+
+app.get("/list.html", (req, res) => {
+    res.sendFile("list.html", { root: __dirname + "/public" });
+});
+
+app.get("/book.html", (req, res) => {
+    res.sendFile("book.html", { root: __dirname + "/public" });
+});
+
+
+//Handle Post Requests
+app.post("/search", function (req, res) {
+
+    const title = req.body.title.trim().toLowerCase();
+    var re = new RegExp(';')
+    var test = re.test(title);
+
+    if (test) {
+        console.log("failed");
+
+    } else {
+
+        var books = null;
+        var tagid = null;
+        var books_with_tags = null;
+
+        var con = mysql.createConnection({
+            host: "dbproject.chw0z33b0eoj.us-west-2.rds.amazonaws.com",
+            user: "bookadmin",
+            password: "proj1234",
+            database: "bookstoredb"
+        });
+
+        const search_books_query = `SELECT * FROM books WHERE book_title = "${title}"`;
+        const find_tag_query = `SELECT tag_id FROM tags WHERE tag_name = "${title}"`;
         
+        let promise = new Promise((resolve, reject) => {
+            con.connect((err) => {
+                if (err) {
+                    throw err;
+                }
+    
+                con.query(search_books_query, (err, result) => {
+                    if (err) {
+                        console.log("Error");
+                    } else {
+                        if (result.length != 0) {
+                            books = result;
+                        }
+                    }
+                })
+    
+                let tag_promise = new Promise((resolve, reject) => {
+                    con.query(find_tag_query, (err, result) => {
+                        if (err) {
+                            console.log("Error");
+                        } 
+                        if (result.length != 0) {
+                            tagid = result[0].tag_id;
+                            resolve();
+                        } else {
+                            reject();
+                            console.log("Found No Selections");
+                        }
+                    })
+                })
 
-    //     $("/public/book.html").ready(() => {
-    //         console.log("setting session vars for local host")
-    //         let cleanNode = document.getElementById("userLogin");
-    //         while (cleanNode.lastChild) {
-    //             cleanNode.removeChild(cleanNode.lastChild);
-    //         }
-    //         let newDiv = document.createElement('h3');
+                tag_promise.then(() => {
+                    const search_tag_query = `SELECT * FROM books JOIN book_tags ON books.book_id = book_tags.book_id JOIN tags ON book_tags.tag_id = tags.tag_id WHERE tags.tag_id = ${tagid};`
 
-    //         newDiv.innerText = "Welcome " + req.session.username;
-    //         // newDiv.id = "hello";
-    //         document.getElementById("userLogin").appendChild(newDiv);
+                    if (tagid != null) {
+                        con.query(search_tag_query, (err, result) => {
+                            if (err) {
+                                console.log("error");
+                            }
+                            
+                            if (books == null) {
+                                books = result;
+                  
+                            } else if (books.length > 0) {
+                                books.concat(result);
+                            }
+                        })
+                    }
 
+                    con.end((err) => {
+                        if (err) {
+                            throw err;
+                        }
+                        console.log("Database connection closed");
+                        resolve();
+                    })
+                })
+                
+                tag_promise.catch(() => {
+                    con.end((err) => {
+                        if (err) {
+                            throw err;
+                        }
+                        console.log("Database connection closed");
+                        resolve();
+                    })
+                })
 
-    //         //test code
-    //         // let newbtn = document.createElement('button');
-    //         // newbtn.innerText = "LogOut";
-    //         // newbtn.onclick(()=>{
-    //         //     req.session.destroy();
-    //         //     $.ajax({
-    //         //         url: "/",
-    //         //         type:"POST"
-    //         //     })
-    //         // });
-    //         // document.getElementById("userLogin").appendChild(newbtn);
+            });
+        })
 
-    //     })
+        promise.then(() => {
+            req.session.searchQuery = JSON.stringify(books);
+            res.send("success");
 
+        })
+       
+    }
+});
 
-    // } else {
-    //     console.log("Sending localhost page")
-    //     res.sendFile(path.join(__dirname, "/public/book.html"));
-    // }
-
-
+app.post("/load_list", (req, res) => {
+    res.send(req.session.searchQuery);
 })
 
+app.post("/moreInfo", (req, res) => {
+    if (req.body.title) {
+        var con = mysql.createConnection({
+            host: "dbproject.chw0z33b0eoj.us-west-2.rds.amazonaws.com",
+            user: "bookadmin",
+            password: "proj1234",
+            database: "bookstoredb"
+        });
+
+        let bookInformationQuery = `SELECT * FROM books WHERE book_title = "${req.body.title}"`
+
+        con.connect( err => {
+            if (err) {
+                throw err;
+            };
+
+            con.query(bookInformationQuery, (err, result) => {
+                if (err) {
+                    throw err;
+                }
+                
+                req.session.bookInfo = JSON.stringify(result[0]);
+                console.log(req.session.bookInfo);
+            });
+        })
+        res.send("success");
+    } else {
+        res.send("failure");
+    }
+})
+
+//checks for a logged in session variable
 app.post("/checkSession", (req, res)=>{
     if (req.session.username) {
         res.json({
@@ -97,6 +216,7 @@ app.post("/checkSession", (req, res)=>{
     }
 })
 
+//Handles a login request.
 app.post("/userInfo", (req, res) => {
     console.log((req.body))
     if (req.body.type === "getUserInfo") {
@@ -136,17 +256,23 @@ app.post("/userInfo", (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Listening on PORT ${PORT}`))
 
-// .connection.end((err) => {
-//     if (err) {
-//         console.log("Closing Error")
-//     } else {
-//         console.log("Closing server Connection")
-//     }
-// });
 
-function queryDb() {
+app.listen(PORT, (err) => {
+    if (err) { console.log("Error"); }
+    console.log(`Server started on port ${PORT}`)
+    console.log(`Listening on PORT ${PORT}`)
+});
 
-}
+
+
+
+
+
+
+
+
+
+
+
+

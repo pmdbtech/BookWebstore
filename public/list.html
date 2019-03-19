@@ -2,13 +2,24 @@
 <html>
 
 <head>
-    <!-- <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
     <title>Book Page</title>
-    <!-- <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
-    <script src="main.js"></script> -->
-    <link rel="stylesheet" href="./css/list.css">
+    <!-- <link rel="stylesheet" href="./css/list.css"> -->
+    <script src="scripts/kevbundle.js"></script>
+    <link rel="stylesheet" href="styles/login.css">
+    <link rel="stylesheet" href="styles/book.css">
+    <script src="scripts/kevbundle.js"></script>
+
+    <script>
+        function openForm() {
+            document.getElementById("myForm").style.display = "block";
+        }
+        
+
+        function closeForm() {
+            document.getElementById("myForm").style.display = "none";
+        }
+
+    </script>
 
 </head>
 
@@ -22,6 +33,26 @@
                 <li><a href="#">Username</a></li>
                 <li><a href="#">Library</a></li>
             </ul>
+
+            <div class='user' id='userLogin'>
+                <button id ='loginpopup' type="button" onclick="openForm()">Login</button>
+
+                <div class="form-popup" id="myForm">
+                    <form class="form-container" id="userInfoForm">
+                        <h1>Login</h1>
+
+                        <label for="Username"><b>Username</b></label>
+                        <input id='getUserID' type="text" placeholder="Enter Username" name="user" required>
+
+                        <label for="psw"><b>Password</b></label>
+                        <input id='psw' type="password" placeholder="Enter Password" name="psw" required>
+
+                        <button type="submit" id='loginbtn' class="btn">Login</button>
+                        <button type="submit" class="btn cancel" onclick="closeForm()">Close</button>
+                    </form>
+                </div>
+            </div>
+
         </header>
 
         <div class="search">

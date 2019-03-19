@@ -6,9 +6,8 @@ var bF = path.resolve(__dirname, "build");
 
 var config = {
     entry: {
-        "index": jF + "/myjs1.js",
-        "room": jF + "/room.js",
-        "main": jF + "/main.js"
+        "kev": jF + "/kevs.js",
+        
     },
     output: {
         filename: "[name]bundle.js",

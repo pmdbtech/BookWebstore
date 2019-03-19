@@ -4,9 +4,7 @@
 //check session variable
 $(document).ready(
     () => {
-        // console.log("helloworld")
-        // let frm = $("#userInfoForm");
-
+        //check if session is available
         $.ajax({
             url:"/checkSession",
             type:"POST",
@@ -24,7 +22,7 @@ $(document).ready(
             }
         })
 
-
+        //overwrite login behaviour
         $("#userInfoForm").submit((e) => {
             // console.log("cheese");
             e.preventDefault();           
@@ -81,3 +79,16 @@ $(document).ready(
         })
     }
 )
+new Vue({
+    el: '#app',      
+    methods: {     
+
+        openForm: ()=> {
+            document.getElementById("myForm").style.display = "block";
+        },
+        closeform: ()=>{
+            document.getElementById("myForm").style.display = "none";
+        }        
+
+    }
+})

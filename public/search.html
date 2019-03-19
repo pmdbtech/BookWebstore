@@ -3,7 +3,22 @@
 
 <head>
     <title>Bookstoredb</title>
-    <link rel="stylesheet" href="./css/search.css">
+    <!-- <link rel="stylesheet" href="./css/search.css"> -->
+    <script src="scripts/kevbundle.js"></script>
+    <link rel="stylesheet" href="styles/search.css">
+    <link rel="stylesheet" href="styles/login.css">
+
+    <script>
+        function openForm() {
+            document.getElementById("myForm").style.display = "block";
+        }
+        
+
+        function closeForm() {
+            document.getElementById("myForm").style.display = "none";
+        }
+
+    </script>
 </head>
 
 <body>
@@ -16,12 +31,31 @@
                 <li><a href="#">Username</a></li>
                 <li><a href="#">Library</a></li>
             </ul>
+
+            <div class='user' id='userLogin'>
+                <button id ='loginpopup' type="button" onclick="openForm()">Login</button>
+
+                <div class="form-popup" id="myForm">
+                    <form class="form-container" id="userInfoForm">
+                        <h1>Login</h1>
+
+                        <label for="Username"><b>Username</b></label>
+                        <input id='getUserID' type="text" placeholder="Enter Username" name="user" required>
+
+                        <label for="psw"><b>Password</b></label>
+                        <input id='psw' type="password" placeholder="Enter Password" name="psw" required>
+
+                        <button type="submit" id='loginbtn' class="btn">Login</button>
+                        <button type="submit" class="btn cancel" onclick="closeForm()">Close</button>
+                    </form>
+                </div>
+            </div>
         </header>
 
         <div class="recommend">
             <div class="bookitem">
-                <img src="./img/asoiaf.jpg" alt="book" height="100%" width="100%" style="margin:none"> 
-                <p style="text-align: center; margin-top:none" >A song of ice and fire</p>
+                <img src="./img/asoiaf.jpg" alt="book" height="100%" width="100%" style="margin:none">
+                <p style="text-align: center; margin-top:none">A song of ice and fire</p>
             </div>
             <div class="bookitem"></div>
             <div class="bookitem"></div>

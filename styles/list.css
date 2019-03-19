@@ -2,6 +2,7 @@ html,
         body,
         .app {
             margin: 0;
+            margin-bottom: 50px;
             padding: 0;
         }        
 
@@ -131,7 +132,7 @@ html,
             width: 70%;
             display: flex;
             flex-direction: row;
-            justify-content: space-evenly;
+            border: black 1px solid;
         }
 
         .imgbk {
@@ -152,6 +153,35 @@ html,
         
         .spacer{
             margin-top:20px;
+        }
+
+        #failure {
+            text-align:center;
+        }
+
+        .book_img {
+
+            padding: 10px;
+        }
+
+        .infobk {
+            padding-left: 10px;
+            position:relative;
+        }
+
+        #list_buttons_div {
+            
+            margin: 10px;
+            position: absolute;
+            right: 0;
+            bottom: 0;
+        }
+        .list_buttons {
+            
+            border-radius: 3px;
+            padding: 10px;
+            margin: 5px;
+
         }
 
         
