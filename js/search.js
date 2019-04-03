@@ -6,6 +6,7 @@ $(document).ready(() => {
             login: false,
             num: 100,
             featuredBooks: {},
+            select: "",
         },
         // function run to send a request to the server to find feature books on webpage load
         created: function () {
@@ -13,6 +14,7 @@ $(document).ready(() => {
             xhttp.onreadystatechange = () => {
                 if (xhttp.readyState == 4 && xhttp.status == 200) {
                     this.featuredBooks = JSON.parse(xhttp.response);
+                    
 
                 }
             }
@@ -22,6 +24,7 @@ $(document).ready(() => {
 
         },
         methods: {
+
             // function to search books for a tag or title
             search: function () {
                 var xhttp = new XMLHttpRequest();
@@ -30,9 +33,16 @@ $(document).ready(() => {
                         window.location.href = "/list.html";
                     }
                 }
-                xhttp.open('POST', "/search", true);
-                xhttp.setRequestHeader("Content-type", "application/json");
-                xhttp.send(JSON.stringify({ title: this.title }));
+                
+                if (this.select === "Tags") {
+                    xhttp.open('POST', "/searchTags", true);
+                    xhttp.setRequestHeader("Content-type", "application/json");
+                    xhttp.send(JSON.stringify({ title: this.title }));
+                } else {
+                    xhttp.open('POST', "/search", true);
+                    xhttp.setRequestHeader("Content-type", "application/json");
+                    xhttp.send(JSON.stringify({ title: this.title }));
+                }
 
             },
             // view information for a book

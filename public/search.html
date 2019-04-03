@@ -46,8 +46,14 @@
             </header>
 
             <div class="search">
+                <select id="select" v-model="select">
+                    <option value="Book Title" selected="selected">Book Title</option>
+                    <option value="Tags">Tags</option>
+                </select>
                 <input v-model="title" id="search-bar" type="search" placeholder="Search a book today!">
+
                 <button @click='search' id="search-button">Search</button>
+
             </div>
 
             <div class="recommend">

@@ -4,7 +4,7 @@ $(document).ready(() => {
         el: '#app',
         data: {
             books: {},
-            failure: true,
+            failure: false,
         },
         // function to run an ajax call to the server to receive information on books to load
         created: function () {
@@ -12,11 +12,12 @@ $(document).ready(() => {
             xhttp.onreadystatechange = () => {
                 if (xhttp.readyState == 4 && xhttp.status == 200) {
                     this.books = JSON.parse(xhttp.response);
+                    console.log(this.books);
 
-                    if (Object.keys(this.books).length > 0) {
-                        this.failure = false;
-                    } else {
+                    if (this.books == null || this.books.length == 0) {
                         this.failure = true;
+                    } else {
+                        console.log(this.books);
                     }
                 }
             }

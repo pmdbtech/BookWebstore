@@ -1,17 +1,22 @@
 body, .app {
     margin: 0;
-    margin-bottom: 50px;
     padding: 0;
+    height: 100%;
+    width: 100%;
+    background-image: url("/img/book_background2.jpg");
+    background-size: cover;
 }
 
 #app {
     display: flex;
     flex-direction: column;
+    height: 100%;
+    width: 100%;
+
 }
 
 #information {
-    background-image: url("/img/book_background2.jpg");
-    background-size: cover;
+
 }
 
 .search {
@@ -72,6 +77,11 @@ body, .app {
 
 #failure {
     text-align: center;
+    font-size: 30px;
+    color: black;
+    margin-top: 20%;
+    border: 2px orange solid;
+    background-color: antiquewhite;
 }
 
 .book_img {

@@ -81,7 +81,7 @@ app.get("/about.html", (req, res) => {
 app.get("/cart.html", (req, res) => {
     if (req.session.username) {
         res.sendFile(path.join(__dirname, "/public/cart.html"));
-    }else{
+    } else {
         res.send("Error 404 Page not found")
     }
 });
@@ -116,30 +116,55 @@ app.post("/search", function (req, res) {
     // object to store book results;
     var books = null;
 
+    // find all books that have the same name as the user input
+    const search_books_query = `SELECT * FROM books WHERE book_title like 
+    "%${title}%" OR book_title like "%${title}" OR book_title like "${title}%" 
+    OR book_title = "${title}"`;
+
+    // Promise to ensure that all queries get completed before sending data
+    let promise = new Promise((resolve) => {
+
+        // pool query to run the search_books_query
+        pool.query(search_books_query, (err, result) => {
+            if (err) {
+                throw err;
+            }
+
+            // if the query finds an object, then set the books variable to this result
+
+            books = result;
+            resolve();
+
+        })
+    })
+
+    // when the promise resolves, then set the session variable to the data and
+    // send a result 
+    promise.then(() => {
+        req.session.searchQuery = JSON.stringify(books);
+        console.log("sending" + req.session.searchQuery);
+        res.send("success");
+    })
+});
+
+// post request for the search function on the search page
+app.post("/searchTags", function (req, res) {
+
+    // user input; case insensitive; stripped whitespace
+    const title = req.body.title.trim().toLowerCase();
+
+    // object to store book results;
+    var books = null;
+
     // object to store tag id if user input is a tag;
     var tagid = null;
 
-    // find all books that have the same name as the user input
-    const search_books_query = `SELECT * FROM books WHERE book_title = "${title}"`;
 
     // find the tag id of the tag with the same name as the user input
     const find_tag_query = `SELECT tag_id FROM tags WHERE tag_name = "${title}"`;
 
     // Promise to ensure that all queries get completed before sending data
-    let promise = new Promise((resolve, reject) => {
-
-        // pool query to run the search_books_query
-        pool.query(search_books_query, (err, result) => {
-            if (err) {
-                reject();
-                throw err;
-            }
-
-            // if the query finds an object, then set the books variable to this result
-            if (result.length != 0) {
-                books = result;
-            }
-        })
+    let promise = new Promise((resolve) => {
 
         // Tag promise to ensure that finding the tag_id query occurs first
         // before searching all tags with that tag id
@@ -154,7 +179,7 @@ app.post("/search", function (req, res) {
                 } else {
                     // if we don't find a result, reject the promise
                     reject();
-                    console.log("Found No Selections");
+
                 }
             })
         })
@@ -168,13 +193,7 @@ app.post("/search", function (req, res) {
                     if (err) throw err;
 
                     // if books is currently null, assign books to the result
-                    if (books == null) {
-                        books = result;
-
-                        // if books is not equal to null then concat the results
-                    } else {
-                        books.concat(result);
-                    }
+                    books = result;
 
                     resolve();
                 })
@@ -191,12 +210,10 @@ app.post("/search", function (req, res) {
     // send a result 
     promise.then(() => {
         req.session.searchQuery = JSON.stringify(books);
+        console.log("sending from tags query" + req.session.searchQuery);
         res.send("success");
     })
 
-    promise.catch(() => {
-        console.log("Error");
-    })
 });
 
 // post request for /load_list url on the list page. Send search results to client
@@ -381,7 +398,7 @@ app.post("/getCart", (req, res) => {
             if (error) {
                 return console.error(error.message);
             }
-            
+
             if (!results) {
                 console.log("..hellow" + results + "There was an error getting the cart, getCart, returns no results")
                 res.send({ status: "failed" });
@@ -390,9 +407,9 @@ app.post("/getCart", (req, res) => {
                 console.log(results)
                 res.send(
                     {
-                    status: "success",
-                    cart: results
-                }
+                        status: "success",
+                        cart: results
+                    }
                 );
             }
         })
@@ -416,13 +433,13 @@ app.post("/getCart", (req, res) => {
 app.post("/removeBookFromCart", (req, res) => {
     //Check session tokens
     if (req.session.username) {
-        
+
         let username = req.session.username;
         console.log("Deleting " + username + "..." + req.body.book.book_id)
 
 
         let mysqlStatement = `DELETE FROM cart WHERE username = "${username}" AND book_id = ${req.body.book.book_id};`;
-        
+
 
         let success = connection.query(mysqlStatement, (error) => {
             if (error) {
@@ -432,15 +449,15 @@ app.post("/removeBookFromCart", (req, res) => {
         if (success) {
             console.log("sucessful delete")
             res.json({
-                status:"successful Delete"
+                status: "successful Delete"
             })
         } else {
             res.json({
-                status:"failed Delete"
+                status: "failed Delete"
             })
-        }      
+        }
 
-    } 
+    }
     else {
         console.log("Error removeBookFromCart, user is NOT logged in")
         // res.json({
@@ -453,27 +470,27 @@ app.post("/removeBookFromCart", (req, res) => {
 app.post("/signUp", (req, res) => {
 
     let check_username_query = "INSERT INTO users VALUES (?, ?, ?, ?);";
-    
+
     pool.query(check_username_query, [req.body.username, req.body.firstname, req.body.lastname, req.body.password],
-    (error, results, fields) => {
-        if (error) {
-            res.send("failed");
-        } else {
-            res.send("success");
-        }
-    })
+        (error, results, fields) => {
+            if (error) {
+                res.send("failed");
+            } else {
+                res.send("success");
+            }
+        })
 })
 
 
 app.post("/endSession", (req, res) => {
     //Check session tokens
-    if (req.session.username) {        
+    if (req.session.username) {
         req.session.destroy();
-        res.send({status:"success"})
-    } 
+        res.send({ status: "success" })
+    }
     else {
         console.log("Error removeBookFromCart, user is NOT logged in")
-        
+
     }
 })
 
