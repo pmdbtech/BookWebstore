@@ -9,8 +9,7 @@ $(document).ready(() => {
             retypedPassword: "",
         },
         methods: {
-            signUp: function () {
-                
+            signUp: function () {                
                 if (this.username.length === 0 || this.password.length === 0 || this.firstname === 0 || this.lastname === 0) {
                     window.alert("All fields must be completed");
                 } else if (this.password != this.retypedPassword) {
@@ -22,7 +21,8 @@ $(document).ready(() => {
                             if(xhttp.response == "failed") {
                                 window.alert("Username taken, choose another");
                             } else {
-                                window.alert("success");
+                                window.alert("Your account has been created");
+                                window.location.href = "/search.html"
                             }
                         }
                     }
